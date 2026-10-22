@@ -15,16 +15,12 @@ try:
         timeout=20
     )
     response.raise_for_status()
-
     soup = BeautifulSoup(response.text, "html.parser")
-
     articles = []
     seen_links = set()
-
     for link in soup.find_all("a", href=True):
         title = link.get_text(" ", strip=True)
         article_url = urljoin(url, link["href"])
-
         if (
             title
             and article_url.startswith("https://29.ru/text/")
@@ -32,19 +28,15 @@ try:
         ):
             articles.append((title, article_url))
             seen_links.add(article_url)
-
         if len(articles) >= 100:
             break
-
     print(f"Найдено заголовков: {len(articles)}")
     print("-" * 60)
-
     for number, (title, article_url) in enumerate(
         articles, start=1
     ):
         print(f"{number}. {title}")
         print(f"   {article_url}\n")
-
     if len(articles) < 100:
         print(
             "Внимание: найдено меньше 100 заголовков. "

@@ -3,11 +3,9 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 url = "https://29.ru/text"
-
 headers = {
     "User-Agent": "Mozilla/5.0"
 }
-
 try:
     response = requests.get(
         url,
@@ -15,6 +13,7 @@ try:
         timeout=20
     )
     response.raise_for_status()
+    response.encoding = response.apparent_encoding
     soup = BeautifulSoup(response.text, "html.parser")
     articles = []
     seen_links = set()
@@ -42,6 +41,5 @@ try:
             "Внимание: найдено меньше 100 заголовков. "
             "Возможно, сайт загружает материалы динамически."
         )
-
 except requests.RequestException as error:
     print(f"Ошибка при загрузке сайта: {error}")
